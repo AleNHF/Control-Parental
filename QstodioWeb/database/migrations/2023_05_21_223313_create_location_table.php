@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUbicationTable extends Migration
+class CreateLocationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateUbicationTable extends Migration
      */
     public function up()
     {
-        Schema::create('ubication', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('location', function (Blueprint $table) {
+            $table->id();
             $table->string('coordinates');
             $table->time('time');
             $table->date('date');
             $table->unsignedBigInteger('children_id');
 
-            $table->foreign('children_id')
-            ->references('id')->on('children')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreign('children_id')->references('id')->on('children')->onDelete('cascade');            
         });
     }
 
@@ -33,6 +33,6 @@ class CreateUbicationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ubication');
+        Schema::dropIfExists('location');
     }
 }

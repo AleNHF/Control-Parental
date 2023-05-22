@@ -14,16 +14,15 @@ class CreateTokenTable extends Migration
     public function up()
     {
         Schema::create('token', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('code');
             $table->date('createDate');
             $table->date('status');
             $table->date('registerDate');
             $table->unsignedBigInteger('children_id');
-
-            $table->foreign('children_id')
-            ->references('id')->on('children')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreign('children_id')->references('id')->on('children')->onDelete('cascade');
         });
     }
 

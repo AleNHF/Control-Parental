@@ -19,7 +19,7 @@ class Planes extends Model
 
     public function user()
     {
-        return $this->belongsToMany(User::class, 'subscriptions');
+        return $this->belongsToMany(User::class, 'suscriptions');
     }
 
     public function suscription(){

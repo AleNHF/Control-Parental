@@ -14,18 +14,16 @@ class CreateSuscriptionsTable extends Migration
     public function up()
     {
         Schema::create('suscriptions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->date('startDate');
             $table->date('startEnd');
-            $table->integer('price');
-            $table->unsignedBigInteger('planes_id');
+            $table->decimal('price');
+            $table->unsignedBigInteger('plan_id');
             $table->unsignedBigInteger('user_id');
-
-            $table->foreign('planes_id')
-            ->references('id')->on('planes')->onDelete('cascade');
-            $table->foreign('user_id')
-            ->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
