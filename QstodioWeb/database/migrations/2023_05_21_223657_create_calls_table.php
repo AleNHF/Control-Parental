@@ -14,15 +14,15 @@ class CreateCallsTable extends Migration
     public function up()
     {
         Schema::create('calls', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('received');
+            $table->id();
+            $table->boolean('received');
             $table->date('date');
-            $table->boolean('duration');
+            $table->string('duration');
             $table->unsignedBigInteger('contacts_id');
 
-            $table->foreign('contacts_id')
-            ->references('id')->on('contacts')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreign('contacts_id')->references('id')->on('contacts')->onDelete('cascade');           
         });
     }
 

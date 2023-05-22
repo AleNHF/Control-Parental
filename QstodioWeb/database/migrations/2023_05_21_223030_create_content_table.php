@@ -14,17 +14,17 @@ class CreateContentTable extends Migration
     public function up()
     {
         Schema::create('content', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('path');
             $table->string('url');
             $table->string('type');
             $table->string('contentData');
             $table->unsignedBigInteger('children_id');
-
-            $table->foreign('children_id')
-            ->references('id')->on('children')->onDelete('cascade');
+            
             $table->timestamps();
+
+            $table->foreign('children_id')->references('id')->on('children')->onDelete('cascade');
         });
     }
 

@@ -13,18 +13,16 @@ class Tutor extends Model
         'name',
         'lastname',
         'birthDay',
-        'sex',
+        'gender',
         'phoneNumber',
         'profilePhoto',
     ];
-
 
     public function user(){
         return $this->belongsTo('App\Models\User');
     }
 
     public function children(){
-        return $this->hasMany(Children::class,'id_tutor','id');
+        return $this->hasMany(Children::class,'tutor_id','id');
     }
-
 }

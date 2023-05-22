@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function plans()
     {
-        return $this->belongsToMany('App\Models\Planes', 'subscriptions');
+        return $this->belongsToMany('App\Models\Plan', 'subscriptions');
     }
 
     public function suscription(){

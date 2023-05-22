@@ -14,16 +14,15 @@ class CreateChildrenTable extends Migration
     public function up()
     {
         Schema::create('children', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('lastname');
             $table->date('birthDay');
-            $table->char('sex');
+            $table->char('gender');
             $table->string('alias');
             $table->string('profilePhoto');
             $table->unsignedBigInteger('tutor_id');
-            $table->foreign('tutor_id')
-            ->references('id')->on('tutor')->onDelete('cascade');
+            $table->foreign('tutor_id')->references('id')->on('tutors')->onDelete('cascade');
             $table->timestamps();
         });
     }
