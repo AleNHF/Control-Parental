@@ -20,7 +20,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'password',  
+        'tutor_id'
     ];
 
     /**
@@ -41,4 +42,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+     public function tutor(){
+        return $this->hasOne('App\Models\Tutor');
+    }
+
+    public function plans()
+    {
+        return $this->belongsToMany('App\Models\Planes', 'subscriptions');
+    }
+
+    public function suscription(){
+        return $this->belongsToMany('App\Models\Suscription');
+    }
 }
+
