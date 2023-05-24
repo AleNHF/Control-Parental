@@ -18,9 +18,10 @@ class CreateTutorsTable extends Migration
             $table->string('name');
             $table->string('lastname');
             $table->date('birthDay');
-            $table->char('gender');
+            $table->char('gender', 1);
             $table->string('phoneNumber');
             $table->string('profilePhoto')->nullable();
+            $table->boolean('isActive'); //Users are actived when they have a plan
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

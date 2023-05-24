@@ -7,8 +7,10 @@ use App\Models\Tutor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\API\BaseController as BaseController;
+use Validator;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
     /**
      * This endpoint is for login into the tutor app 
@@ -18,20 +20,20 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'message' => 'Email o contraseña incorrecto'
-            ], 401);
+            return $this->sendError('Unauthorized', ['error' => 'Unauthorized']);
         }
 
         $user = User::where('email', $request['email'])->firstOrFail();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
+        $result = [
             'access_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user
-        ]);
+        ];
+
+        return $this->sendResponse($result, 'You have successfully log in');
     }
 
     /**
@@ -39,20 +41,21 @@ class AuthController extends Controller
      * Parameter: id -> user
      */
 
-    public function profile($userId)
+    public function profile()
     {
-        $user = User::findOrFail($userId);
-        $tutor = Tutor::findOrFail($user->tutor_id);
+        $user = User::find(Auth::user()->id);
+        $tutor = Tutor::where(['user_id' => $user->id])->first();
+         
+        if ($user == null ) {
+            return $this->sendError('Validation Error.', 'User not found');
+        }
 
-        $data = [
+        $result = [
             'user' => $user,
             'tutor' => $tutor
         ];
 
-        return response()->json([
-            'message' => 'Datos del Usuario',
-            'data' => $data,
-        ]);
+        return $this->sendResponse($result, 'Success');
     }
 
     /**
@@ -61,42 +64,50 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json([
-            "msg" => "Cierre de Sesión",
-            "data" => $request->user()
-        ]);
+        $result = $request->user();
+
+        return $this->sendResponse($result, "You have successfully logout");
     }
 
-    public function register(Request $request)
-    {
-        $validateData = $request->validate([
+    /**
+     * This is for register users
+     */
+    public function register(Request $request) {
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'birthDay' => 'required|date',
             'gender' => 'required|string|max:1',
             'phoneNumber' => 'required|numeric',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|confirmed|string|min:8',
-        ]);
-        
-        $tutor = Tutor::create([
-            'name' => $validateData['name'],
-            'lastname' => $validateData['lastname'],
-            'birthDay' => $validateData['birthDay'],
-            'phoneNumber' => $validateData['phoneNumber'],
-            'gender' => $validateData['gender'],
+            'password' => 'required|string|min:8',
         ]);
 
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $input = $request->all();
+        
         $user = User::create([
-            'name' => $validateData['name'],
-            'email' => $validateData['email'],
-            'password' => $validateData['password'],
-            'tutor_id' => $tutor->id
+            'name' => $input['name'],
+            'email' => $input['email'],
+            'password' => bcrypt($input['password']),
+        ]);
+        
+        Tutor::create([
+            'name' => $input['name'],
+            'lastname' => $input['lastname'],
+            'birthDay' => $input['birthDay'],
+            'phoneNumber' => $input['phoneNumber'],
+            'gender' => $input['gender'],
+            'user_id' => $user->id
         ]);
         
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
+            'success' => true,
             'access_token' => $token,
             'token_type' => 'Bearer'
         ]);

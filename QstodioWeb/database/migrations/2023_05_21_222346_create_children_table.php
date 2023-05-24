@@ -18,7 +18,7 @@ class CreateChildrenTable extends Migration
             $table->string('name');
             $table->string('lastname');
             $table->date('birthDay');
-            $table->char('gender');
+            $table->char('gender', 1);
             $table->string('alias');
             $table->string('profilePhoto');
             $table->unsignedBigInteger('tutor_id');

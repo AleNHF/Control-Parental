@@ -21,8 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',  
-        'type',
-        'tutor_id'
+        'type'
     ];
 
     /**
@@ -45,7 +44,7 @@ class User extends Authenticatable
     ];
 
      public function tutor(){
-        return $this->hasOne('App\Models\Tutor');
+        return $this->hasOne(Tutor::class, 'user_id');
     }
 
     

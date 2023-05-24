@@ -18,10 +18,9 @@ class CreateContactsTable extends Migration
             $table->string('name');
             $table->string('phoneNumber');
             $table->unsignedBigInteger('children_id');
-
-            $table->foreign('children_id')
-            ->references('id')->on('children')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreign('children_id')->references('id')->on('children')->onDelete('cascade');
         });
     }
 

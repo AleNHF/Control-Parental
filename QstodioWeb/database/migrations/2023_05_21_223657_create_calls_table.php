@@ -19,7 +19,6 @@ class CreateCallsTable extends Migration
             $table->date('date');
             $table->string('duration');
             $table->unsignedBigInteger('contacts_id');
-
             $table->timestamps();
 
             $table->foreign('contacts_id')->references('id')->on('contacts')->onDelete('cascade');           
