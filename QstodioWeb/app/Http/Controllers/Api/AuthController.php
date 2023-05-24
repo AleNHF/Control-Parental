@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     /**
-     * This endpoint is for logging into the tutor app 
+     * This endpoint is for login into the tutor app 
      * Required:
      *      email, password
      */
@@ -64,6 +64,41 @@ class AuthController extends Controller
         return response()->json([
             "msg" => "Cierre de Sesión",
             "data" => $request->user()
+        ]);
+    }
+
+    public function register(Request $request)
+    {
+        $validateData = $request->validate([
+            'name' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'birthDay' => 'required|date',
+            'gender' => 'required|string|max:1',
+            'phoneNumber' => 'required|numeric',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|confirmed|string|min:8',
+        ]);
+        
+        $tutor = Tutor::create([
+            'name' => $validateData['name'],
+            'lastname' => $validateData['lastname'],
+            'birthDay' => $validateData['birthDay'],
+            'phoneNumber' => $validateData['phoneNumber'],
+            'gender' => $validateData['gender'],
+        ]);
+
+        $user = User::create([
+            'name' => $validateData['name'],
+            'email' => $validateData['email'],
+            'password' => $validateData['password'],
+            'tutor_id' => $tutor->id
+        ]);
+        
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer'
         ]);
     }
 }

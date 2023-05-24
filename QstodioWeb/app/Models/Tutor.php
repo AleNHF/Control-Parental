@@ -16,6 +16,7 @@ class Tutor extends Model
         'gender',
         'phoneNumber',
         'profilePhoto',
+        'user_id'
     ];
 
     public function user(){
@@ -24,5 +25,14 @@ class Tutor extends Model
 
     public function children(){
         return $this->hasMany(Children::class,'tutor_id','id');
+    }
+
+    public function plans()
+    {
+        return $this->belongsToMany('App\Models\Plan', 'subscriptions');
+    }
+
+    public function suscription(){
+        return $this->belongsToMany('App\Models\Suscription');
     }
 }

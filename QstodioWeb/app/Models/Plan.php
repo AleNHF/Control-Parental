@@ -17,12 +17,12 @@ class Planes extends Model
         'status',
     ];
 
-    public function user()
+    public function tutor()
     {
-        return $this->belongsToMany(User::class, 'suscriptions');
+        return $this->hasMany(Tutor::class, 'plan_id');
     }
 
     public function suscription(){
-        return $this->belongsToMany('App\Models\Suscription');
+        return $this->hasMany('App\Models\Suscription');
     }
 }

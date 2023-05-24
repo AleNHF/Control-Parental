@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',  
+        'type',
         'tutor_id'
     ];
 
@@ -47,13 +48,6 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Tutor');
     }
 
-    public function plans()
-    {
-        return $this->belongsToMany('App\Models\Plan', 'subscriptions');
-    }
-
-    public function suscription(){
-        return $this->belongsToMany('App\Models\Suscription');
-    }
+    
 }
 

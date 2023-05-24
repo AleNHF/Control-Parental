@@ -19,11 +19,11 @@ class CreateSuscriptionsTable extends Migration
             $table->date('startEnd');
             $table->decimal('price');
             $table->unsignedBigInteger('plan_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('tutor_id');
             $table->timestamps();
 
             $table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('tutor_id')->references('id')->on('tutors')->onDelete('cascade');
         });
     }
 

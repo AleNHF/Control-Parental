@@ -20,8 +20,12 @@ class CreateTutorsTable extends Migration
             $table->date('birthDay');
             $table->char('gender');
             $table->string('phoneNumber');
-            $table->string('profilePhoto');
+            $table->string('profilePhoto')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        
         });
     }
 

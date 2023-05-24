@@ -14,14 +14,14 @@ class Suscriptions extends Model
         'startEnd',
         'price',
         'plan_id',
-        'user_id',
+        'tutor_id',
     ];
 
     public function plan(){
-        return $this->BelongsTo('App\Models\Plan');
+        return $this->belongsTo('App\Models\Plan');
     }
 
-    public function user(){
-        return $this->BelongsTo('App\Models\User');
+    public function tutor(){
+        return $this->belongsTo('App\Models\Tutor');
     }
 }
