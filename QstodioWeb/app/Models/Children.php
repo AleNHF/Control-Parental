@@ -23,4 +23,14 @@ class Children extends Model
     {
         return $this->belongsTo(Tutor::class, 'tutor_id');
     }
+    
+    public function locations()
+    {
+        return $this->hasMany(Location::class, 'children_id');
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class, 'children_id');
+    }
 }

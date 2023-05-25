@@ -5,20 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+class File extends Model
 {
     use HasFactory;
 
-    protected $table = 'location';
+    protected $table = 'files';
     protected $fillable = [
-        'coordinates',
-        'time',
-        'date',
+        'createDate',
+        'path',
         'children_id',
     ];
 
     public function children()
     {
-        return $this->belongsTo('App\Models\Children');
+        return $this->belongsTo(Children::class, 'children_id');
     }
 }

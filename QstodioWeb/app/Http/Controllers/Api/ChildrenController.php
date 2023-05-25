@@ -15,7 +15,8 @@ class ChildrenController extends BaseController
     /**
      * This endpoint is for add children into the app tutor
      */
-    public function store(Request $request) {
+    public function store(Request $request) 
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',

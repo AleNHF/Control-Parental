@@ -27,5 +27,11 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::post('children/store', [App\Http\Controllers\API\ChildrenController::class, 'store']);
 
     Route::post('location/store', [App\Http\Controllers\API\LocationController::class, 'store']);
-    Route::get('location/{kid-id}', [App\Http\Controllers\API\LocationController::class, 'index']);
+    Route::post('location/kid', [App\Http\Controllers\API\LocationController::class, 'getLocationXKid']);
+
+    Route::get('file/kid/{idkid}', [App\Http\Controllers\API\FileController::class, 'getFilesXKid']);
+    Route::post('file', [App\Http\Controllers\API\FileController::class, 'store']);
+    Route::put('file/{id}', [App\Http\Controllers\API\FileController::class, 'update']);
+    Route::get('file/{id}', [App\Http\Controllers\API\FileController::class, 'show']);
+    Route::delete('file/{id}', [App\Http\Controllers\API\FileController::class, 'destroy']);
 });

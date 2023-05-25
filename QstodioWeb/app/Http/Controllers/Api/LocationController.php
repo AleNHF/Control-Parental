@@ -15,18 +15,18 @@ class LocationController extends BaseController
     /**
      * This endpoint is for store coordinates of a kid
      */
-    public function index($id)
+    public function getLocationXKid(Request $request)
     {
-        $kid = Children::findOrFail($id);
+        $kid = Children::findOrFail($request->children_id);
         $tutor = Tutor::find($kid->tutor_id);
         
-        if (Auth::user()->id == $tutor->id) {
+        if (Auth::user()->id == $tutor->user_id) {
             $locations = Location::where(['children_id' => $kid->id])->get();
 
             return $this->sendResponse($locations, "List of locations");
         }
 
-        return $this->sendError("No Content.", 204);
+        return $this->sendError("No Content.", 204); 
     }
 
     /**
@@ -45,23 +45,20 @@ class LocationController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $kid = Children::findOrFail($request->id);
+        $kid = Children::findOrFail($request->children_id);
         $tutor = Tutor::find($kid->tutor_id);
 
-        if (Auth::user()->id == $tutor->id) {
-           /* $location = Location::create([
+        if (Auth::user()->id == $tutor->user_id) {
+            $location = Location::create([
                 'coordinates' => $request->coordinates,
                 'date' => $request->date,
                 'time' => $request->time,
                 'children_id' => $kid->id
-            ]);*/
+            ]);
 
-            return $this->sendResponse($tutor, "Location saved successfully");
+            return $this->sendResponse($location, "Location saved successfully");
         }
 
         return $this->sendError("No Content.", 204);
-    }
-
-
-    
+    }    
 }
