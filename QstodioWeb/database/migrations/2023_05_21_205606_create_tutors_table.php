@@ -21,7 +21,7 @@ class CreateTutorsTable extends Migration
             $table->char('gender', 1);
             $table->string('phoneNumber');
             $table->string('profilePhoto')->nullable();
-            $table->boolean('isActive'); //Users are actived when they have a plan
+            $table->boolean('isActive')->default(true); //Users are actived when they have a plan
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

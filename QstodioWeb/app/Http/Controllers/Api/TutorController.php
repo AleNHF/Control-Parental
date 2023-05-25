@@ -2,65 +2,63 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Tutor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\API\BaseController as BaseController;
 
-class TutorController extends Controller
+class TutorController extends BaseController
 {
     /**
      * This endpoint is for update profile of user tutor
      */
-    public function updateProfile(Request $request)
-    {
-        $user = User::findOrFail($request->user()->id);
-        $tutor = Tutor::findOrFail($user->tutor_id);
-        
-        if ($user->tipo == "T") {
-            $validateData = $request->validate([
-                'name' => 'required|string|max:255',
-                'lastname' => 'required|string|max:255',
-                'birthDay' => 'required|date',
-                'gender' => 'required|string|max:1',
-                'phoneNumber' => 'required|numeric',
-                'email' => 'required|string|email|max:255',
-                'password' => 'required|confirmed|string|min:8',
-                'profilePhoto' => 'mimes:jpg,jpeg,bmp,png|max:2048|nullable'
-            ]);
+    public function update(Request $request)
+    {      
+        $user = User::findOrFail(Auth::user()->id);
+        $tutor = Tutor::where(['user_id' => $user->id])->first();
 
+        if ($user == null) {
+            return $this->sendError('Unauthorized.', 401);
+        }
+
+        $input = $request->all();
+        
+        if ($user->type == "T") {
             $url = null;
 
             if ($request->hasFile('profilePhoto')) {
                 $folder = "public/profiles";
-                if ($tutor->profilePhoto != null) {          //si entra es para actualizar su profilePhoto borrando la que tenía, si no tenía entonces no entra
+                //If the user enters, it is to update their profile photo, deleting the one they had
+                if ($tutor->profilePhoto != null) {          
                     Storage::delete($tutor->profilePhoto);
                 }
                 $imagen = $request->file('profilePhoto')->store($folder);   
                 $url = Storage::url($imagen);
                 $tutor->profilePhoto = $url;
             }
-            $tutor->name = $validateData['name'];
-            $tutor->lastname = $validateData['lastname'];
-            $tutor->birthDay = $validateData['birthDay'];
-            $tutor->gender = $validateData['gender'];
-            $tutor->phoneNumber = $validateData['phoneNumber'];
-            $tutor->save();
-            $user->name = $validateData['name'];
-            $user->email = $validateData['email'];
-            $user->password = bcrypt($validateData['password']);
+
+            $user->name = $input['name'];
+            $user->email = $input['email'];
+            $user->password = bcrypt($input['password']);
             $user->save();
 
-            return response()->json([
-                'message' => 'Datos de usuario actualizado exitosamente',
-                'data' => ['user' => $user, 'tutor' => $tutor]
-            ]);
+            $tutor->name = $input['name'];
+            $tutor->lastname = $input['lastname'];
+            $tutor->birthDay = $input['birthDay'];
+            $tutor->gender = $input['gender'];
+            $tutor->phoneNumber = $input['phoneNumber'];
+            $tutor->save();
+
+            $result = [
+                'user' => $user, 
+                'tutor' => $tutor
+            ];
+
+            return $this->sendResponse($result, "You have successfully updates your profile.");
         } else {
-            return response()->json([
-                'message' => 'Debe ser un usuario tutor para actualizar los datos'
-            ], 404);
+            return $this->sendError("Forbidden.", 403);
         }
     }
 
@@ -70,7 +68,7 @@ class TutorController extends Controller
     public function getChildren()
     {
         $user = User::find(Auth::user()->id);
-        $tutor = Tutor::find($user->tutor_id);
+        $tutor = Tutor::where(['user_id' => $user->id])->first();
 
         $children = $tutor->children;
         $countChildren = $children->count();
@@ -79,16 +77,15 @@ class TutorController extends Controller
             $child->profilePhoto = 'https://picsum.photos/200';
         }
 
+        $result = [
+            'totalRecords' => $countChildren,
+            $children,        
+        ];
+
         if ($children != null) {
-            return response()->json([
-                'message' => 'Listado de hijos',
-                'data' => $children,
-                'totalRecords' => $countChildren
-            ], 200);
+            return $this->sendResponse($result, "This is a list of your children");
         } else {
-            return response()->json([
-                'message' => 'Este tutor no tiene ningún hijo registrado'
-            ], 404);
+            return $this->sendError('No Content.', 204);
         }
     }
 }

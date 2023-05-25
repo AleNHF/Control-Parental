@@ -19,12 +19,14 @@ class Tutor extends Model
         'user_id'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function children(){
-        return $this->hasMany(Children::class,'tutor_id','id');
+    public function children()
+    {
+        return $this->hasMany(Children::class, 'tutor_id');
     }
 
     public function plans()

@@ -20,10 +20,11 @@ class CreateChildrenTable extends Migration
             $table->date('birthDay');
             $table->char('gender', 1);
             $table->string('alias');
-            $table->string('profilePhoto');
+            $table->string('profilePhoto')->nullable();
             $table->unsignedBigInteger('tutor_id');
-            $table->foreign('tutor_id')->references('id')->on('tutors')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreign('tutor_id')->references('id')->on('tutors')->onDelete('cascade');
         });
     }
 

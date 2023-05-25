@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Tutor;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,7 +37,6 @@ class AuthController extends BaseController
 
     /**
      * This endpoint is for get profile of user tutor into the tutor app
-     * Parameter: id -> user
      */
 
     public function profile()
@@ -47,7 +45,7 @@ class AuthController extends BaseController
         $tutor = Tutor::where(['user_id' => $user->id])->first();
          
         if ($user == null ) {
-            return $this->sendError('Validation Error.', 'User not found');
+            return $this->sendError('Unauthorized.', 401);
         }
 
         $result = [
