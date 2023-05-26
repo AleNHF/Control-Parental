@@ -34,4 +34,16 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::put('file/{id}', [App\Http\Controllers\API\FileController::class, 'update']);
     Route::get('file/{id}', [App\Http\Controllers\API\FileController::class, 'show']);
     Route::delete('file/{id}', [App\Http\Controllers\API\FileController::class, 'destroy']);
+
+    Route::get('contact/kid/{idkid}', [App\Http\Controllers\API\ContactsController::class, 'getContactsXKid']);
+    Route::post('contact', [App\Http\Controllers\API\ContactsController::class, 'store']);
+    Route::put('contact/{id}', [App\Http\Controllers\API\ContactsController::class, 'update']);
+    Route::get('contact/{id}', [App\Http\Controllers\API\ContactsController::class, 'show']);
+    Route::delete('contact/{id}', [App\Http\Controllers\API\ContactsController::class, 'destroy']);
+
+    Route::get('contact/call/{idcontact}', [App\Http\Controllers\API\CallController::class, 'getCallsXContact']);
+    Route::post('contact/call', [App\Http\Controllers\API\CallController::class, 'store']);
+    Route::put('contact/call/{id}', [App\Http\Controllers\API\CallController::class, 'update']);
+    Route::get('contact/call/{id}', [App\Http\Controllers\API\CallController::class, 'show']);
+    Route::delete('contact/call/{id}', [App\Http\Controllers\API\CallController::class, 'destroy']);
 });

@@ -33,4 +33,9 @@ class Children extends Model
     {
         return $this->hasMany(File::class, 'children_id');
     }
+
+    public function contacts()
+    {
+        return $this->hasMany(Contacts::class, 'children_id');
+    }
 }
