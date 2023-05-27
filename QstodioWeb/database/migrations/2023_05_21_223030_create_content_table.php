@@ -15,13 +15,14 @@ class CreateContentTable extends Migration
     {
         Schema::create('content', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->dateTime('date')->nullable();
+            $table->string('name')->nullable();
             $table->string('path');
             $table->string('url');
-            $table->string('type');
-            $table->string('contentData');
-            $table->unsignedBigInteger('children_id');
-            
+            $table->string('type'); //PARENT NAME FOR AWS
+            $table->string('contentData'); //NAME FOR AWS
+            $table->boolean('capture')->nullable()->default(false);
+            $table->unsignedBigInteger('children_id');        
             $table->timestamps();
 
             $table->foreign('children_id')->references('id')->on('children')->onDelete('cascade');

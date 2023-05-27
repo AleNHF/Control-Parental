@@ -46,4 +46,13 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::put('contact/call/{id}', [App\Http\Controllers\API\CallController::class, 'update']);
     Route::get('contact/call/{id}', [App\Http\Controllers\API\CallController::class, 'show']);
     Route::delete('contact/call/{id}', [App\Http\Controllers\API\CallController::class, 'destroy']);
+
+    Route::get('content/index', [App\Http\Controllers\API\ContentController::class, 'index']);
+    Route::get('content/quantity', [App\Http\Controllers\API\ContentController::class, 'quantity_of_content']);
+    Route::get('content/{idKid}', [App\Http\Controllers\API\ContentController::class, 'contentXKid']);
+    Route::get('content/children', [App\Http\Controllers\API\ContentController::class, 'contentXChildren']);
+    Route::post('content/store', [App\Http\Controllers\API\ContentController::class, 'store']);
+    Route::put('content/{id}', [App\Http\Controllers\API\ContentController::class, 'update']);
+    Route::get('content/{id}', [App\Http\Controllers\API\ContentController::class, 'show']);
+    Route::delete('content/{id}', [App\Http\Controllers\API\CallController::class, 'destroy']);
 });
