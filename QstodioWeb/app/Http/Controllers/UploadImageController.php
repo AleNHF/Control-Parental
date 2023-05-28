@@ -95,7 +95,7 @@ class UploadImageController extends Controller
                     'url' => $url
                 ]);
             }
-            return response()->json(['labels' => $labels]);
+            return response()->json(['labels' => $labels]);//retorna las etiquetas de la imagen ya enviada a analizar a Rekognition
         }
     }
     /**
