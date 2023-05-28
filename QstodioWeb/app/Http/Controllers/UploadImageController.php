@@ -82,7 +82,7 @@ class UploadImageController extends Controller
 
             $result = $client->detectModerationLabels([
                 'Image' => ['Bytes' => $bytes],
-                'MinConfidence' => 51
+                'MinConfidence' => 51 //porcentaje que queremos que retorne de una imagen inapropiada
 
             ]);
             $labels = $result['ModerationLabels'] ?? []; //verifica si retorna etiquetas de descripción de la foto de contenido inapropiado, si la foto no tuviera contenido inapropiado no devolvería nada
@@ -95,7 +95,7 @@ class UploadImageController extends Controller
                     'url' => $url
                 ]);
             }
-            return response()->json(['labels' => $labels]);//retorna las etiquetas de la imagen ya enviada a analizar a Rekognition
+            return response()->json(['labels' => $labels]); //retorna las etiquetas de la imagen ya enviada a analizar a Rekognition
         }
     }
     /**
